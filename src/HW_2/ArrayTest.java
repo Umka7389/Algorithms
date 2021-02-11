@@ -23,5 +23,6 @@ public class ArrayTest {
         arrayInsert.sortInsert();
         System.out.println(System.nanoTime() - currentTime);
 
+
     }
 }
