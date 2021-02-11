@@ -1,16 +1,21 @@
 package HW_3;
 
 
+import HW_3.dequeue.IDequeue;
 import HW_3.queue.IQueue;
 import HW_3.queue.PriorityQueueImpl;
+import HW_3.queue.QueueImpl;
 import HW_3.stack.IStack;
 import HW_3.stack.StackImpl;
+import HW_3.stringReverse.StringReverse;
 
 public class Test3 {
 
     public static void main(String[] args) {
 //        testStack();
         testQueue();
+        testStringReverse();
+        testDequeue();
     }
 
     private static void testStack() {
@@ -42,8 +47,8 @@ public class Test3 {
     }
 
     private static void testQueue() {
-//        IQueue<Integer> queue = new QueueImpl<>(5);
-        IQueue<Integer> queue = new PriorityQueueImpl<>(5);
+        IQueue<Integer> queue = new QueueImpl<>(5);
+//        IQueue<Integer> queue = new PriorityQueueImpl<>(5);
         System.out.println(queue.insert(3));
         System.out.println(queue.insert(5));
         System.out.println(queue.insert(1));
@@ -57,6 +62,30 @@ public class Test3 {
 
         while (!queue.isEmpty()) {
             System.out.println(queue.remove());
+        }
+    }
+
+    private static void testStringReverse() {
+        StringReverse<Character> stringReverse = new StringReverse<>();
+        String out = stringReverse.reverse("Hello World!");
+        System.out.println(out);
+    }
+
+    private static void testDequeue() {
+        IDequeue<Integer> queue = new IDequeue<>(5);
+        System.out.println(queue.insertFirst(3));
+        System.out.println(queue.insertFirst(5));
+        System.out.println(queue.insertFirst(1));
+        System.out.println(queue.insertFirst(2));
+        System.out.println(queue.insertFirst(6));
+        System.out.println(queue.insertFirst(4));
+
+        System.out.println("Queue peek: " + queue.peekHead());
+        System.out.println("Queue size: " + queue.size());
+        System.out.println("Queue is full: " + queue.isFull());
+
+        while (!queue.isEmpty()) {
+            System.out.println(queue.removeFirst());
         }
     }
 }
