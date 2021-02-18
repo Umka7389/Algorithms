@@ -1,6 +1,8 @@
 package HW_4;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class SimpleLinkedListImpl<E> implements LinkedList<E> {
 
@@ -93,6 +95,7 @@ public class SimpleLinkedListImpl<E> implements LinkedList<E> {
 
     @Override
     public E getFirst() {
+
         return firstElement != null ? firstElement.item : null;
 //        return Optional.ofNullable(firstElement)
 //                .map(node -> node.item)
@@ -101,6 +104,22 @@ public class SimpleLinkedListImpl<E> implements LinkedList<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<E>() {
+            Node<E> currentNode = firstElement;
+            int nextIndex;
+
+            @Override
+            public boolean hasNext() {
+                return nextIndex < size;
+            }
+
+            @Override
+            public E next() {
+                Node<E> lastReturn = currentNode;
+                currentNode = currentNode.next;
+                nextIndex++;
+                return lastReturn.item;
+            }
+        };
     }
 }
