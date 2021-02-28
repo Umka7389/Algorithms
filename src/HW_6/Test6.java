@@ -1,5 +1,6 @@
 package HW_6;
 
+import java.util.Random;
 import java.util.TreeMap;
 
 public class Test6 {
@@ -19,26 +20,29 @@ public class Test6 {
 
         System.out.println(treeMap);
 
-        Tree<Integer> tree = new TreeImpl<>();
-        tree.add(60);
-        tree.add(50);
-        tree.add(66);
-        tree.add(40);
-        tree.add(55);
-        tree.add(70);
-        tree.add(31);
-        tree.add(45);
-        tree.add(42);
-        tree.add(43);
-        tree.add(67);
-        tree.add(81);
+        int balancedTreeCount = 0;
+        int maxTreeLevel = 4;
+        int maxTreeElements = (int) Math.pow(2, maxTreeLevel) - 1;
+        for (int i = 0; i < 20; i++) {
+            Tree<Integer> tree = new TreeImpl<>(maxTreeLevel);
+            for (int j = 0; j <= maxTreeElements; j++) {
+                tree.add((int) (Math.random() * 50 - 25));
+            }
+            if (tree.isBalanced()) {
+                balancedTreeCount++;
+            }
+            System.out.println(tree.isBalanced());
+            tree.display();
+        }
+        System.out.printf("Number of balanced tree: %d/20", balancedTreeCount);
 
+/*
         System.out.println("Find 70: " + tree.contains(70));
         System.out.println("Find 700: " + tree.contains(700));
 
-        tree.display();
-        tree.remove(40);
-        tree.display();
+        tree.display();*/
+//        tree.remove(40);
+//        tree.display();
 
 //        tree.traverse(Tree.TraverseMode.IN_ORDER);
 //        tree.traverse(Tree.TraverseMode.PRE_ORDER);

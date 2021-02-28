@@ -4,6 +4,10 @@ import java.util.Stack;
 
 public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
 
+    public TreeImpl(int maxTreeLevel) {
+        this.maxTreeLevel = maxTreeLevel;
+    }
+
     private class NodeAndParent {
         Node<E> current;
         Node<E> parent;
@@ -16,19 +20,23 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
 
     private int size;
     private Node<E> root;
+    private int maxTreeLevel;
+    private int currentTreeLevel = 1;
 
 
     @Override
     public void add(E value) {
         Node<E> newNode = new Node<>(value);
-
         if (isEmpty()) {
             root = newNode;
             size++;
             return;
         }
-
         NodeAndParent nodeAndParent = doFind(value);
+        if (currentTreeLevel > maxTreeLevel) {
+            return;
+        }
+
         if (nodeAndParent.current != null) {
             // nodeAndParent.current.setValue(value)
             return;
@@ -44,7 +52,6 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
         } else {
             previous.setRightChild(newNode);
         }
-
         size++;
     }
 
@@ -57,20 +64,38 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
     private NodeAndParent doFind(E value) {
         Node<E> current = root;
         Node<E> previous = null;
+        currentTreeLevel = 1;
         while (current != null) {
+
             if (current.getValue().equals(value)) {
                 return new NodeAndParent(current, previous);
             }
+            currentTreeLevel++;
             previous = current;
             if (current.isLeftChild(value)) {
                 current = current.getLeftChild();
-            }
-            else {
+            } else {
                 current = current.getRightChild();
             }
         }
 
         return new NodeAndParent(null, previous);
+    }
+
+    @Override
+    public boolean isBalanced() {
+        return isBalanced(root);
+    }
+
+    public  boolean isBalanced(Node<E> node) {
+        return (node == null) ||
+                isBalanced(node.getLeftChild())
+                        && isBalanced(node.getRightChild())
+                        && Math.abs(height(node.getLeftChild()) - height(node.getRightChild())) <= 1;
+    }
+
+    private  int height(Node<E> node) {
+        return node == null ? 0 : (1 + Math.max(height(node.getLeftChild()), height(node.getRightChild())));
     }
 
     @Override
@@ -91,8 +116,7 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
             } else {
                 parentNode.setRightChild(null);
             }
-        }
-        else if (removedNode.hasOnlyOneChild()) {
+        } else if (removedNode.hasOnlyOneChild()) {
             Node<E> childNode = removedNode.getLeftChild() != null
                     ? removedNode.getLeftChild()
                     : removedNode.getRightChild();
@@ -104,8 +128,7 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
             } else {
                 parentNode.setRightChild(childNode);
             }
-        }
-        else {
+        } else {
             Node<E> successor = getSuccessor(removedNode);
             if (removedNode == root) {
                 root = successor;
