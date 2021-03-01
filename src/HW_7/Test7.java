@@ -5,7 +5,8 @@ public class Test7 {
     public static void main(String[] args) {
 //        testGraph();
 //        testDfs();
-        testBfs();
+//        testBfs();
+        testMinDestination();
     }
 
     private static void testGraph() {
@@ -61,5 +62,32 @@ public class Test7 {
         graph.addEdges("D", "G");
 
         graph.bfs("A");
+    }
+    private static void testMinDestination() {
+        Graph graph = new Graph(10);
+        graph.addVertex("Москва");
+        graph.addVertex("Тула");
+        graph.addVertex("Липецк");
+        graph.addVertex("Воронеж");
+        graph.addVertex("Рязань");
+        graph.addVertex("Тамбов");
+        graph.addVertex("Саратов");
+        graph.addVertex("Калуга");
+        graph.addVertex("Орел");
+        graph.addVertex("Курск");
+
+
+        graph.addEdges("Москва", "Тула", "Рязань", "Калуга");
+        graph.addEdges("Тула", "Липецк", "Москва");
+        graph.addEdges("Липецк", "Тула", "Воронеж");
+        graph.addEdges("Воронеж", "Липецк", "Саратов", "Курск");
+        graph.addEdges("Рязань", "Москва", "Тамбов");
+        graph.addEdges("Тамбов", "Рязань", "Саратов");
+        graph.addEdges("Саратов", "Тамбов", "Воронеж");
+        graph.addEdges("Калуга", "Москва", "Орел");
+        graph.addEdges("Орел", "Калуга", "Курск");
+        graph.addEdges("Курск", "Орел", "Воронеж");
+
+        graph.optimalDestination("Москва", "Воронеж");
     }
 }
