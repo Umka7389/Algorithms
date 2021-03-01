@@ -19,8 +19,8 @@ public class Graph implements IGraph {
 
     @Override
     public void addEdge(String startLabel, String endLabel) {
-        int startIndex  = indexOf(startLabel);
-        int endIndex    = indexOf(endLabel);
+        int startIndex = indexOf(startLabel);
+        int endIndex = indexOf(endLabel);
 
         if (startIndex == -1 || endIndex == -1) {
             throw new IllegalArgumentException("Invalid label for vertex");
@@ -112,6 +112,35 @@ public class Graph implements IGraph {
         resetVertexState();
     }
 
+    @Override
+    public void optimalDestination(String startLabel, String endLabel) {
+        int startIndex = indexOf(startLabel);
+        int endIndex = indexOf(endLabel);
+        if (startIndex == -1 || endIndex == -1) {
+            throw new IllegalArgumentException("Invalid start/end label");
+        }
+
+        Queue<Vertex> queue = new LinkedList<>();
+        Vertex vertex = vertexList.get(startIndex);
+        vertex.setVisited(true);
+        queue.add(vertex);
+        while (!queue.isEmpty()) {
+            Vertex previous = queue.peek();
+            vertex = getNearUnvisitedVertex(queue.peek());
+            if (vertex != null) {
+                vertex.setPrevious(previous);
+                vertex.setVisited(true);
+                queue.add(vertex);
+            } else {
+                queue.remove();
+            }
+        }
+        printOptimalPath(vertexList.get(endIndex));
+
+
+        resetVertexState();
+    }
+
     private void resetVertexState() {
         for (Vertex vertex : vertexList) {
             vertex.setVisited(false);
@@ -133,9 +162,23 @@ public class Graph implements IGraph {
         vertex.setVisited(true);
         stack.push(vertex);
     }
+
     private void visitVertex(Queue<Vertex> queue, Vertex vertex) {
         System.out.println(vertex);
         vertex.setVisited(true);
         queue.add(vertex);
+    }
+
+
+    private void printOptimalPath(Vertex endPoint) {
+        Stack<Vertex> stack = new Stack<>();
+        stack.push(endPoint);
+        while (endPoint.getPrevious() != null) {
+            stack.push(endPoint.getPrevious());
+            endPoint = endPoint.getPrevious();
+        }
+        while (!stack.isEmpty()) {
+            System.out.println(stack.pop());
+        }
     }
 }
